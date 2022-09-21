@@ -102,12 +102,26 @@ def FetchData():
         dLastName = row[2]
         dPriSkill = row[3]
         dLocation = row[4]
+
+        key = "emp-id-" + str(emp_id) + "_image_file"
+
+        s3 = boto3.resource('s3')
+        bkt = s3.bucket(custombucket)
+        for obj in bkt.objects.all():
+            if(obj.key[8:9] == emp_id):
+                image = obj.get()['Body'].read()
+                break
+
+        bucket_location = boto3.client('s3').get_bucket_location(Bucket=custombucket)
+        s3_location = (bucket_location['LocationConstraint'])
+        url = "https://s3-%s.amazonaws.com/%s/%s" % (s3_location, custombucket, key)
+
         
     finally:
         cursor.close()
 
-    return render_template("GetEmpOutput.html", id=emp_id, fname=dFirstName, 
-    lname=dLastName, interest=dPriSkill, location=dLocation)
+    return render_template("GetEmpOutput.html", id=dEmpID, fname=dFirstName, 
+    lname=dLastName, interest=dPriSkill, location=dLocation, image_url=url)
 
 
 if __name__ == '__main__':
