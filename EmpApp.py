@@ -86,6 +86,8 @@ def GetEmp():
 
 @app.route("/fetchdata", methods=['GET', 'POST'])
 def FetchData():
+    l = Label(id='name')
+
     emp_id = request.form['emp_id']
     sqlCmd = "SELECT * FROM employee WHERE emp_id=%s"
     cursor = db_conn.cursor()
@@ -105,42 +107,47 @@ def FetchData():
 
         key = "emp-id-" + str(emp_id) + "_image_file.png"
 
-        # s3 = boto3.resource('s3')
-        # bkt = s3.bucket(custombucket)
-        # for obj in bkt.objects.all():
-        #     if(obj.key[8:9] == emp_id):
-        #         image = obj.get()['Body'].read()
-        #         break
-
-        # s3_client = boto3.client('s3')
-        # public_urls = []
-        # try:
-        #     for item in s3_client.list_objects(Bucket=bucket)['Contents']:
-        #         presigned_url = s3_client.generate_presigned_url('get_object', Params = {'Bucket': bucket, 'Key': item['Key']}, ExpiresIn = 100)
-        #         public_urls.append(presigned_url)
-        # except Exception as e:
-        #     pass
-        # # print("[INFO] : The contents inside show_image = ", public_urls)
-        # return public_urls
-
         # Get Image URL
-        bucket_location = boto3.client('s3').get_bucket_location(Bucket=custombucket)
-        s3_location = (bucket_location['LocationConstraint'])
-
-        if s3_location is None:
-            s3_location = ''
-        else:
-            s3_location = '-' + s3_location
+        # bucket_location = boto3.client('s3').get_bucket_location(Bucket=custombucket)
+        # s3_location = (bucket_location['LocationConstraint'])
 
         url = "https://%s.s3.amazonaws.com/%s" % (custombucket, key)
 
+    except Exception as e:
+        return str(e)
         
     finally:
         cursor.close()
 
-    return render_template("GetEmpOutput.html", id=dEmpID, fname=dFirstName, 
+    return render_template("GetEmpOutput.html", id=l['text'], fname=dFirstName, 
     lname=dLastName, interest=dPriSkill, location=dLocation, image_url=url)
 
+@app.route("/delemp/")
+def delEmp():
+    # Get Employee
+    emp_id = request.form['emp_id']
+    # SELECT STATEMENT TO GET DATA FROM MYSQL
+    select_stmt = "SELECT * FROM employee WHERE emp_id = %(emp_id)s"
+    delete_stmt = "DELETE FROM employee WHERE emp_id = %(emp_id)s"
+    cursor = db_conn.cursor()
+    cursor1 = db_conn.cursor()
+
+    try:
+        cursor.execute(select_stmt, {'emp_id': int(emp_id)})
+        cursor1.execute(delete_stmt, {'emp_id': int(emp_id)})
+        # FETCH ONLY ONE ROWS OUTPUT
+        for result in cursor:
+            print(result)
+        db_conn.commit()
+    except Exception as e:
+        db_conn.rollback()
+        return str(e)
+
+    finally:
+        cursor.close()
+        cursor1.close()
+
+    return render_template('OutRemoveEmployee.html', result=result)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=80, debug=True)
