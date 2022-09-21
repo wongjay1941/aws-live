@@ -87,7 +87,7 @@ def GetEmp():
 @app.route("/fetchdata", methods=['GET', 'POST'])
 def FetchData():
     emp_id = request.form['emp_id']
-    sqlCmd = "SELECT * FROM employee WHERE emp_id='%s'"
+    sqlCmd = "SELECT * FROM employee WHERE emp_id=%s"
     cursor = db_conn.cursor()
 
     if emp_id == "":
