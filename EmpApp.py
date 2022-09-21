@@ -97,11 +97,11 @@ def FetchData():
         #Getting Employee Data
         cursor.execute(sqlCmd, (emp_id))
         row = cursor.fetchone()
-        dEmpID = row["emp_id"]
-        dFirstName = row["first_name"]
-        dLastName = row["last_name"]
-        dPriSkill = row["pri_skill"]
-        dLocation = row["location"]
+        dEmpID = row[0]
+        dFirstName = row[1]
+        dLastName = row[2]
+        dPriSkill = row[3]
+        dLocation = row[4]
         
     finally:
         cursor.close()
