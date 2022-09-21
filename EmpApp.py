@@ -132,7 +132,7 @@ def FetchData():
         else:
             s3_location = '-' + s3_location
 
-        url = "https://s3-%s.amazonaws.com/%s/%s" % (s3_location, custombucket, key)
+        url = "https://%s.s3.amazonaws.com/%s" % (custombucket, key)
 
         
     finally:
