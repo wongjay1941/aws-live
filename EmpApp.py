@@ -80,6 +80,31 @@ def AddEmp():
     print("all modification done...")
     return render_template('AddEmpOutput.html', name=emp_name)
 
+@app.route("/fetchdata", methods=['POST'])
+def fetchData():
+    emp_id = request.form['emp_id']
+    sqlCmd = "SELECT * FROM employee WHERE emp_id='%s'"
+    cursor = db_conn.cursor()
+
+    if emp_id == "":
+        return "Please enter an employee ID"
+
+    try:
+        #Getting Employee Data
+        cursor.execute(sqlCmd, (emp_id))
+        result = db_conn.fetchone()
+        dEmpID = row["emp_id"]
+        dFirstName = row["first_name"]
+        dLastName = row["last_name"]
+        dPriSkill = row["pri_skill"]
+        dLocation = row["location"]
+        
+    finally:
+        cursor.close()
+
+    return render_template("GetEmpOutput.html", id=emp_id, fname=dFirstName, 
+    lname=dLastName, interest=dPriSkill, location=dLocation)
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=80, debug=True)
