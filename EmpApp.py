@@ -96,7 +96,7 @@ def FetchData():
     try:
         #Getting Employee Data
         cursor.execute(sqlCmd, (emp_id))
-        result = cursor.fetchone()
+        row = cursor.fetchone()
         dEmpID = row["emp_id"]
         dFirstName = row["first_name"]
         dLastName = row["last_name"]
