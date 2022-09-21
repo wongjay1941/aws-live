@@ -103,7 +103,7 @@ def FetchData():
         dPriSkill = row[3]
         dLocation = row[4]
 
-        key = "emp-id-" + str(emp_id) + "_image_file"
+        key = "emp-id-" + str(emp_id) + "_image_file.png"
 
         # s3 = boto3.resource('s3')
         # bkt = s3.bucket(custombucket)
