@@ -86,8 +86,6 @@ def GetEmp():
 
 @app.route("/fetchdata", methods=['GET', 'POST'])
 def FetchData():
-    l = Label(id='name')
-
     emp_id = request.form['emp_id']
     sqlCmd = "SELECT * FROM employee WHERE emp_id=%s"
     cursor = db_conn.cursor()
@@ -119,7 +117,7 @@ def FetchData():
     finally:
         cursor.close()
 
-    return render_template("GetEmpOutput.html", id=l['text'], fname=dFirstName, 
+    return render_template("GetEmpOutput.html", id=dEmpID, fname=dFirstName, 
     lname=dLastName, interest=dPriSkill, location=dLocation, image_url=url)
 
 @app.route("/delemp/")
