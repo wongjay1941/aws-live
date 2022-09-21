@@ -105,12 +105,12 @@ def FetchData():
 
         key = "emp-id-" + str(emp_id) + "_image_file"
 
-        s3 = boto3.resource('s3')
-        bkt = s3.bucket(custombucket)
-        for obj in bkt.objects.all():
-            if(obj.key[8:9] == emp_id):
-                image = obj.get()['Body'].read()
-                break
+        # s3 = boto3.resource('s3')
+        # bkt = s3.bucket(custombucket)
+        # for obj in bkt.objects.all():
+        #     if(obj.key[8:9] == emp_id):
+        #         image = obj.get()['Body'].read()
+        #         break
 
         bucket_location = boto3.client('s3').get_bucket_location(Bucket=custombucket)
         s3_location = (bucket_location['LocationConstraint'])
