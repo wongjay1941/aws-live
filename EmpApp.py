@@ -155,7 +155,7 @@ if __name__ == '__main__':
     app.run(host='0.0.0.0', port=80, debug=True)
 
 @app.route("/fetchdataToEdit", methods=['GET', 'POST'])
-def FetchData():
+def FetchDataToEdit():
     emp_id = request.form['emp_id']
     sqlCmd = "SELECT * FROM employee WHERE emp_id=%s"
     cursor = db_conn.cursor()
