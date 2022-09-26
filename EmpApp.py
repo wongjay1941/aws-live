@@ -200,10 +200,10 @@ def EditEmp():
     cursor = db_conn.cursor()
 
     if emp_image_file.filename == "":
-        return "Please select a file"
+        key = "emp-id-" + str(emp_id) + "_image_file.png"
+        url = "https://%s.s3.amazonaws.com/%s" % (custombucket, key)
 
     try:
-
         cursor.execute(edit_sql, (emp_id, first_name, last_name, pri_skill, location, emp_id))
         db_conn.commit()
         emp_name = "" + first_name + " " + last_name
