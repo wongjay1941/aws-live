@@ -84,6 +84,10 @@ def AddEmp():
 def GetEmp():
     return render_template("GetEmp.html")
 
+@app.route("/toEditemp", methods=['GET', 'POST'])
+def ToEditEmp():
+    return render_template("EditEmp.html")
+
 @app.route("/fetchdata", methods=['GET', 'POST'])
 def FetchData():
     emp_id = request.form['emp_id']
@@ -185,10 +189,6 @@ def FetchData():
 
     return render_template("EditEmp.html", id=dEmpID, fname=dFirstName, 
     lname=dLastName, interest=dPriSkill, location=dLocation, image_url=url)
-
-@app.route("/toeditemp", methods=['GET', 'POST'])
-def ToEditEmp():
-    return render_template("EditEmp.html")
 
 @app.route("/editemp", methods=['POST'])
 def EditEmp():
