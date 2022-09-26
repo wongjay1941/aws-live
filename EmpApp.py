@@ -196,7 +196,7 @@ def EditEmp():
     location = request.form['location']
     emp_image_file = request.files['emp_image_file']
 
-    edit_sql = "UPDATE employee SET first_name=%s, last_name=%s, pri_skill=%s, location=%s) WHERE emp_id=%s"
+    edit_sql = "UPDATE employee SET first_name=%s, last_name=%s, pri_skill=%s, location=%s WHERE emp_id=%s"
     cursor = db_conn.cursor()
 
     if emp_image_file.filename == "":
