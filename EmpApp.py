@@ -150,6 +150,42 @@ def delEmp():
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=80, debug=True)
 
+@app.route("/fetchdataForEdit", methods=['GET', 'POST'])
+def FetchData():
+    emp_id = request.form['emp_id']
+    sqlCmd = "SELECT * FROM employee WHERE emp_id=%s"
+    cursor = db_conn.cursor()
+
+    if emp_id == "":
+        return "Please enter an employee ID"
+
+    try:
+        #Getting Employee Data
+        cursor.execute(sqlCmd, (emp_id))
+        row = cursor.fetchone()
+        dEmpID = row[0]
+        dFirstName = row[1]
+        dLastName = row[2]
+        dPriSkill = row[3]
+        dLocation = row[4]
+
+        key = "emp-id-" + str(emp_id) + "_image_file.png"
+
+        # Get Image URL
+        # bucket_location = boto3.client('s3').get_bucket_location(Bucket=custombucket)
+        # s3_location = (bucket_location['LocationConstraint'])
+
+        url = "https://%s.s3.amazonaws.com/%s" % (custombucket, key)
+
+    except Exception as e:
+        return str(e)
+        
+    finally:
+        cursor.close()
+
+    return render_template("EditEmp.html", id=dEmpID, fname=dFirstName, 
+    lname=dLastName, interest=dPriSkill, location=dLocation, image_url=url)
+
 @app.route("/editemp", methods=['POST'])
 def EditEmp():
     emp_id = request.form['emp_id']
