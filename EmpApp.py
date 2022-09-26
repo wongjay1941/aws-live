@@ -84,10 +84,6 @@ def AddEmp():
 def GetEmp():
     return render_template("GetEmp.html")
 
-@app.route("/toEditemp", methods=['GET', 'POST'])
-def ToEditEmp():
-    return render_template("EditEmp.html")
-
 @app.route("/fetchdata", methods=['GET', 'POST'])
 def FetchData():
     emp_id = request.form['emp_id']
@@ -151,8 +147,9 @@ def delEmp():
 
     return render_template('OutRemoveEmployee.html', result=result)
 
-if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=80, debug=True)
+@app.route("/toEditemp", methods=['GET', 'POST'])
+def ToEditEmp():
+    return render_template("EditEmp.html")
 
 @app.route("/fetchdataToEdit", methods=['GET', 'POST'])
 def FetchDataToEdit():
@@ -192,6 +189,9 @@ def FetchDataToEdit():
 
 @app.route("/editemp", methods=['POST'])
 def EditEmp():
+
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=80, debug=True)
     emp_id = request.form['emp_id']
     first_name = request.form['first_name']
     last_name = request.form['last_name']
