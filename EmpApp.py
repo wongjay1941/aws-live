@@ -154,7 +154,7 @@ def delEmp():
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=80, debug=True)
 
-@app.route("/fetchdataForEdit", methods=['GET', 'POST'])
+@app.route("/fetchdataToEdit", methods=['GET', 'POST'])
 def FetchData():
     emp_id = request.form['emp_id']
     sqlCmd = "SELECT * FROM employee WHERE emp_id=%s"
@@ -187,7 +187,7 @@ def FetchData():
     finally:
         cursor.close()
 
-    return render_template("EditEmp.html", id=dEmpID, fname=dFirstName, 
+    return render_template("EditEmpProc.html", id=dEmpID, fname=dFirstName, 
     lname=dLastName, interest=dPriSkill, location=dLocation, image_url=url)
 
 @app.route("/editemp", methods=['POST'])
