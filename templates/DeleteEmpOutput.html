@@ -93,27 +93,18 @@
         <section>
             <div id="" class="pad-sec" style="text-align: center;">
                 <div class="container">
-                    <h2>View Employee Details</h2>
-                    <br>
-                    <div class="form-style-5" style="text-align: left">
-                        <form autocomplete="on" method="POST" enctype="multipart/form-data">
-                            <fieldset>
-                                <b>Employee ID: </b>{{ id }}<br><br>
-				<input type="number" name="emp_id" value="{{ id }}" style="position:absolute; top:80px; right:0; visibility:hidden">
-                                <b>First Name: </b>{{ fname }}<br><br>
-                                <b>Last Name: </b>{{ lname }}<br><br>
-                                <b>Primary Skills: </b>{{ interest }}<br><br>
-                                <b>Location: </b>{{ location }}<br><br>
-                                <b>Image: </b><img src="{{ image_url }}"><br><br>
-                            </fieldset>
-                            <input type="submit" value="EDIT" formaction="/fetchdataToEdit" />
-                            <input type="submit" value="DELETE" formaction="/delemp" />
+                    <div class="form-style-5">
+                        <form action="/gotosearchemployee" autocomplete="on" method="GET">
+                            <h2 style="color: #737272;">REMOVED SUCCESSFULLY</h2><br>
+                            <h3 style="color: #737272;">Following Employee has been deleted from the database</h3><br>
+                            <h3 style="color: #737272;">{{ name }}</h3><br>
+                            <input type="submit" value="OK  " />
                         </form>
                     </div>
                 </div>
             </div>
         </section>
-	    
+
         <!-- Footer
         ================================================== -->
         <footer>

@@ -23,13 +23,19 @@ table = 'employee'
 
 @app.route("/", methods=['GET', 'POST'])
 def home():
+    return render_template('index.html')
+
+@app.route("/gotoemployee")
+def gotoemployee():
+    return render_template('HomeEmp.html')
+
+@app.route("/gotoaddemployee")
+def gotoaddemployee():
     return render_template('AddEmp.html')
 
-
-@app.route("/about", methods=['POST'])
-def about():
-    return render_template('www.intellipaat.com')
-
+@app.route("/gotosearchemployee")
+def gotosearchemployee():
+    return render_template('GetEmp.html')
 
 @app.route("/addemp", methods=['POST'])
 def AddEmp():
@@ -124,22 +130,24 @@ def FetchData():
     return render_template("GetEmpOutput.html", id=dEmpID, fname=dFirstName, 
     lname=dLastName, interest=dPriSkill, location=dLocation, image_url=url)
 
-@app.route("/delemp/")
-def delEmp():
+@app.route("/delemp", methods=['POST'])
+def DelEmp():
     # Get Employee
     emp_id = request.form['emp_id']
     # SELECT STATEMENT TO GET DATA FROM MYSQL
-    select_stmt = "SELECT * FROM employee WHERE emp_id = %(emp_id)s"
-    delete_stmt = "DELETE FROM employee WHERE emp_id = %(emp_id)s"
+    selectCmd = "SELECT * FROM employee WHERE emp_id = %(emp_id)s"
+    deleteCmd = "DELETE FROM employee WHERE emp_id = %(emp_id)s"
     cursor = db_conn.cursor()
     cursor1 = db_conn.cursor()
 
     try:
-        cursor.execute(select_stmt, {'emp_id': int(emp_id)})
-        cursor1.execute(delete_stmt, {'emp_id': int(emp_id)})
+        cursor.execute(selectCmd, {'emp_id': int(emp_id)})
+        cursor1.execute(deleteCmd, {'emp_id': int(emp_id)})
         # FETCH ONLY ONE ROWS OUTPUT
-        for result in cursor:
-            print(result)
+        row = cursor.fetchone()
+        dFirstName = row[1]
+        dLastName = row[2]
+        emp_name = "" + dFirstName + " " + dLastName
         db_conn.commit()
     except Exception as e:
         db_conn.rollback()
@@ -149,7 +157,7 @@ def delEmp():
         cursor.close()
         cursor1.close()
 
-    return render_template('OutRemoveEmployee.html', result=result)
+    return render_template('DeleteEmpOutput.html', name=emp_name)
 
 @app.route("/fetchdataToEdit", methods=['GET', 'POST'])
 def FetchDataToEdit():
@@ -184,7 +192,7 @@ def FetchDataToEdit():
     finally:
         cursor.close()
 
-    return render_template("EditEmpProc.html", id=dEmpID, fname=dFirstName, 
+    return render_template("EditEmp.html", id=dEmpID, fname=dFirstName, 
     lname=dLastName, interest=dPriSkill, location=dLocation, image_url=url)
 
 @app.route("/editemp", methods=['POST'])
@@ -198,7 +206,7 @@ def EditEmp():
 
     edit_sql = "UPDATE employee SET first_name=%s, last_name=%s, pri_skill=%s, location=%s WHERE emp_id=%s"
     cursor = db_conn.cursor()
-
+    
     if emp_image_file.filename == "":
         key = "emp-id-" + str(emp_id) + "_image_file.png"
         url = "https://%s.s3.amazonaws.com/%s" % (custombucket, key)
@@ -234,7 +242,7 @@ def EditEmp():
         cursor.close()
 
     print("all modification done...")
-    return render_template('EditEmpOutput.html', name=emp_name)
+    return render_template('EditEmpOutput.html', name=emp_name, id=emp_id)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=80, debug=True)

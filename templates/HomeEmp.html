@@ -73,14 +73,14 @@
                 <!-- Collect the nav links, forms, and other content for toggling -->
                 <div class="collapse navbar-collapse" id="navigation-nav">
                     <ul class="nav navbar-nav navbar-right">
-                        <li class="active"><a class="section-scroll" href="index.html#wrapper">Home</a></li>
-                        <li><a href="index.html#landing-offer">About</a></li>
+                        <li class="active"><a class="section-scroll" href="/">Home</a></li>
+                        <li><a href="/#landing-offer">About</a></li>
                         <!-- <li><a href="#features-section">Services</a></li> -->
                         <!-- <li><a href="#team-section">Team</a></li> -->
                         <!-- <li><a href="#screenshots-section">Works</a></li>
-                        <li><a href="#prices-section">Prices</a></li>
-                        <li><a href="#subscribe-section">Subscribe</a></li> -->
-                        <li><a href="HomeEmp.html#wrapper">Employee</a></li>
+            <li><a href="#prices-section">Prices</a></li>
+            <li><a href="#subscribe-section">Subscribe</a></li> -->
+                        <li><a href="/gotoemployee">Employee</a></li>
                         <!-- <li><a href="#contact-section">Contact</a></li> -->
                     </ul>
                 </div><!-- /.navbar-collapse -->
@@ -93,27 +93,23 @@
         <section>
             <div id="" class="pad-sec" style="text-align: center;">
                 <div class="container">
-                    <h2>View Employee Details</h2>
-                    <br>
-                    <div class="form-style-5" style="text-align: left">
-                        <form autocomplete="on" method="POST" enctype="multipart/form-data">
-                            <fieldset>
-                                <b>Employee ID: </b>{{ id }}<br><br>
-				<input type="number" name="emp_id" value="{{ id }}" style="position:absolute; top:80px; right:0; visibility:hidden">
-                                <b>First Name: </b>{{ fname }}<br><br>
-                                <b>Last Name: </b>{{ lname }}<br><br>
-                                <b>Primary Skills: </b>{{ interest }}<br><br>
-                                <b>Location: </b>{{ location }}<br><br>
-                                <b>Image: </b><img src="{{ image_url }}"><br><br>
-                            </fieldset>
-                            <input type="submit" value="EDIT" formaction="/fetchdataToEdit" />
-                            <input type="submit" value="DELETE" formaction="/delemp" />
-                        </form>
-                    </div>
+                    <form>
+			    <h2>Employee Management</h2>
+			    <br>
+			    <button class="button-56" type="submit" formaction="/gotoaddemployee">ADD NEW EMPLOYEE</button>
+			    <br><br>
+			    <button class="button-56" type="submit" formaction="/gotosearchemployee">EDIT EMPLOYEE DETAILS</button>
+			    <br><br>
+			    <button class="button-56" type="submit" formaction="/gotosearchemployee">DELETE EMPLOYEE</button>
+			    <br><br>
+			    <button class="button-56" type="submit" formaction="/gotosearchemployee">SEARCH EMPLOYEE</button>
+			    <br><br>
+			    <!-- <button class="button-56" role="button">VIEW ALL EMPLOYEE</button> -->
+		    </form>
                 </div>
             </div>
         </section>
-	    
+
         <!-- Footer
         ================================================== -->
         <footer>
@@ -141,7 +137,7 @@
     </div>
 
     <!-- Back-to-top
-    ================================================== -->
+  ================================================== -->
     <div class="back-to-top">
         <i class="fa fa-angle-up fa-3x"></i>
     </div> <!-- end back-to-top -->
@@ -169,6 +165,7 @@
     <script src="http://maps.google.com/maps/api/js?sensor=false"></script>
     <script src="../static/js/jquery.gmaps.js"></script>
     <script src="../static/js/main.js"></script>
+
 </body>
 
 </html>
