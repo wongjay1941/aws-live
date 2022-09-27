@@ -152,7 +152,7 @@ def DelEmp():
         emp_name = "" + dFirstName + " " + dLastName
         db_conn.commit()
 
-        s3.delete_object(Bucket=custombucket, Key=key)
+        s3.Bucket(custombucket).delete_object(Key=key)
     except Exception as e:
         db_conn.rollback()
         return str(e)
