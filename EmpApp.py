@@ -140,7 +140,7 @@ def DelEmp():
     cursor = db_conn.cursor()
     cursor1 = db_conn.cursor()
     key = "emp-id-" + str(emp_id) + "_image_file.png"
-    s3 = boto3.resource('s3')
+    s3 = boto3.client('s3')
 
     try:
         cursor.execute(selectCmd, {'emp_id': int(emp_id)})
@@ -152,7 +152,7 @@ def DelEmp():
         emp_name = "" + dFirstName + " " + dLastName
         db_conn.commit()
 
-        s3.Bucket(custombucket).delete_object(Key=key)
+        s3.delete_object(Bucket=custombucket, Key=key)
     except Exception as e:
         db_conn.rollback()
         return str(e)
