@@ -113,13 +113,17 @@ def FetchData():
         dPriSkill = row[3]
         dLocation = row[4]
 
+        s3_client = boto3.client('s3')
+
         key = "emp-id-" + str(emp_id) + "_image_file.png"
 
+        for item in s3_client.list_objects(Bucket=custombucket)['Contents']:
+            if(item['Key'] == key):
+                url = s3_client.generate_presigned_url('get_object', Params = {'Bucket': bucket, 'Key': item['Key']}, ExpiresIn = 100)
+        
         # Get Image URL
-        # bucket_location = boto3.client('s3').get_bucket_location(Bucket=custombucket)
-        # s3_location = (bucket_location['LocationConstraint'])
 
-        url = "https://%s.s3.amazonaws.com/%s" % (custombucket, key)
+        # url = "https://%s.s3.amazonaws.com/%s" % (custombucket, key)
 
     except Exception as e:
         return str(e)
