@@ -112,15 +112,14 @@ def FetchData():
         dLastName = row[2]
         dPriSkill = row[3]
         dLocation = row[4]
-
+        
         s3_client = boto3.client('s3')
-
         key = "emp-id-" + str(emp_id) + "_image_file.png"
 
         for item in s3_client.list_objects(Bucket=custombucket)['Contents']:
             if(item['Key'] == key):
                 url = s3_client.generate_presigned_url('get_object', Params = {'Bucket': bucket, 'Key': item['Key']})
-        
+
         # Get Image URL
 
         # url = "https://%s.s3.amazonaws.com/%s" % (custombucket, key)
