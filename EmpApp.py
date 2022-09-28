@@ -119,7 +119,7 @@ def FetchData():
 
         for item in s3_client.list_objects(Bucket=custombucket)['Contents']:
             if(item['Key'] == key):
-                url = s3_client.generate_presigned_url('get_object', Params = {'Bucket': bucket, 'Key': item['Key']}, ExpiresIn = 100)
+                url = s3_client.generate_presigned_url('get_object', Params = {'Bucket': bucket, 'Key': item['Key']})
         
         # Get Image URL
 
