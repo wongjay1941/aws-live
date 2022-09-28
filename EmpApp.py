@@ -113,9 +113,9 @@ def FetchData():
         dPriSkill = row[3]
         dLocation = row[4]
         
-        s3_client = boto3.client('s3')
         key = "emp-id-" + str(emp_id) + "_image_file.png"
 
+        s3_client = boto3.client('s3')
         for item in s3_client.list_objects(Bucket=custombucket)['Contents']:
             if(item['Key'] == key):
                 url = s3_client.generate_presigned_url('get_object', Params = {'Bucket': bucket, 'Key': item['Key']})
@@ -187,11 +187,15 @@ def FetchDataToEdit():
 
         key = "emp-id-" + str(emp_id) + "_image_file.png"
 
+        s3_client = boto3.client('s3')  
+        for item in s3_client.list_objects(Bucket=custombucket)['Contents']:
+            if(item['Key'] == key):
+                url = s3_client.generate_presigned_url('get_object', Params = {'Bucket': bucket, 'Key': item['Key']})
         # Get Image URL
         # bucket_location = boto3.client('s3').get_bucket_location(Bucket=custombucket)
         # s3_location = (bucket_location['LocationConstraint'])
 
-        url = "https://%s.s3.amazonaws.com/%s" % (custombucket, key)
+        # url = "https://%s.s3.amazonaws.com/%s" % (custombucket, key)
 
     except Exception as e:
         return str(e)
@@ -213,37 +217,37 @@ def EditEmp():
 
     edit_sql = "UPDATE employee SET first_name=%s, last_name=%s, pri_skill=%s, location=%s WHERE emp_id=%s"
     cursor = db_conn.cursor()
-    
-    if emp_image_file.filename == "":
-        key = "emp-id-" + str(emp_id) + "_image_file.png"
-        url = "https://%s.s3.amazonaws.com/%s" % (custombucket, key)
 
     try:
         cursor.execute(edit_sql, (first_name, last_name, pri_skill, location, emp_id))
         db_conn.commit()
         emp_name = "" + first_name + " " + last_name
-        # Uplaod image file in S3 #
-        emp_image_file_name_in_s3 = "emp-id-" + str(emp_id) + "_image_file.png"
-        s3 = boto3.resource('s3')
 
-        try:
-            print("Data inserted in MySQL RDS... uploading image to S3...")
-            s3.Bucket(custombucket).put_object(Key=emp_image_file_name_in_s3, Body=emp_image_file)
-            bucket_location = boto3.client('s3').get_bucket_location(Bucket=custombucket)
-            s3_location = (bucket_location['LocationConstraint'])
+        if emp_image_file.filename != "":
+            key = "emp-id-" + str(emp_id) + "_image_file.png"
+            # url = "https://%s.s3.amazonaws.com/%s" % (custombucket, key)
+            # Uplaod image file in S3 #
+            emp_image_file_name_in_s3 = "emp-id-" + str(emp_id) + "_image_file.png"
+            s3 = boto3.resource('s3')
 
-            if s3_location is None:
-                s3_location = ''
-            else:
-                s3_location = '-' + s3_location
+            try:
+                print("Data inserted in MySQL RDS... uploading image to S3...")
+                s3.Bucket(custombucket).put_object(Key=emp_image_file_name_in_s3, Body=emp_image_file)
+                bucket_location = boto3.client('s3').get_bucket_location(Bucket=custombucket)
+                s3_location = (bucket_location['LocationConstraint'])
 
-            object_url = "https://s3{0}.amazonaws.com/{1}/{2}".format(
-                s3_location,
-                custombucket,
-                emp_image_file_name_in_s3)
+                if s3_location is None:
+                    s3_location = ''
+                else:
+                    s3_location = '-' + s3_location
 
-        except Exception as e:
-            return str(e)
+                object_url = "https://s3{0}.amazonaws.com/{1}/{2}".format(
+                    s3_location,
+                    custombucket,
+                    emp_image_file_name_in_s3)
+
+            except Exception as e:
+                return str(e)
 
     finally:
         cursor.close()
